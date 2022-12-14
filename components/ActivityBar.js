@@ -1,69 +1,46 @@
 import { useContext, useLayoutEffect, useState } from 'react';
-import { StyleSheet, Text, View, Pressable, Animated } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Pressable,
+  Animated,
+  LayoutAnimation,
+  Platform,
+  UIManager,
+  Text,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { GoalContext } from '../context/goal-context';
 
-export default function ActivityBar() {
-  const [levelAnim, setLevelAnim] = useState(new Animated.Value(0));
-  const [levelFontAnim, setFontLevelAnim] = useState(new Animated.Value(0));
-  const [levelActivity, setLevelActivity] = useState(0);
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
+export default function ActivityBar() {
+  const [boxPosition, setBoxPosition] = useState('light');
   const GoalCtx = useContext(GoalContext);
 
-  function selectLevel(level) {
+  function toggleBox(level) {
+    LayoutAnimation.configureNext({
+      duration: 150,
+      create: { type: 'easeIn', property: 'opacity' },
+      update: { type: 'easeIn', property: 'opacity' },
+      delete: { type: 'linear', property: 'opacity' },
+    });
+    setBoxPosition(level);
     GoalCtx.setActivityLevel(level);
   }
-
-  function levelChangeHandler(level) {
-    setLevelActivity(level);
-    Animated.timing(levelAnim, {
-      toValue: 1,
-      duration: 200,
-    }).start(() => {
-      Animated.timing(levelFontAnim, {
-        toValue: 1,
-        duration: 0,
-      }).start();
-    });
-  }
-
-  function levelNullHandler(level) {
-    Animated.timing(levelAnim, {
-      toValue: 0,
-      duration: 200,
-    }).start(() => {
-      Animated.timing(levelFontAnim, {
-        toValue: 0,
-        duration: 0,
-      }).start();
-    });
-    setLevelActivity(level);
-  }
-
-  const levelFontAnimInt = levelFontAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['white', 'black'],
-  });
-
-  const levelAnimInt = levelAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['black', 'white'],
-  });
-
-  const levelFontAnimStyle = {
-    color: levelFontAnimInt,
-  };
-
-  const levelAnimStyle = {
-    backgroundColor: levelAnimInt,
-  };
 
   useLayoutEffect(() => {
     async function fetchLevel() {
       const storedLevel = await AsyncStorage.getItem('activityLevel');
       if (storedLevel) {
         GoalCtx.setActivityLevel(storedLevel);
+        setBoxPosition(storedLevel);
       }
     }
     fetchLevel();
@@ -71,50 +48,47 @@ export default function ActivityBar() {
 
   return (
     <View style={styles.activityBar}>
+      <View style={{ position: 'absolute', width: '100%', height: '100%' }}>
+        <Animated.View
+          style={[
+            styles.animView,
+            boxPosition === 'moderate'
+              ? styles.moveCenter
+              : boxPosition === 'high'
+              ? styles.moveRight
+              : styles.moveLeft,
+          ]}
+        />
+      </View>
       <Pressable
-        onPress={async () => {
-          await levelNullHandler(1);
-          levelChangeHandler(1);
-          selectLevel('light');
+        onPress={() => {
+          toggleBox('light');
         }}
         style={styles.pressableContainer}>
-        <Animated.View
-          style={[styles.textContainer, levelActivity === 1 && levelAnimStyle]}>
-          <Animated.Text
-            style={[styles.text, levelActivity === 1 && levelFontAnimStyle]}>
-            Light
-          </Animated.Text>
-        </Animated.View>
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>Light</Text>
+          <Text style={styles.text}>(0-2H)</Text>
+        </View>
       </Pressable>
       <Pressable
-        onPress={async () => {
-          await levelNullHandler(2);
-          levelChangeHandler(2);
-          selectLevel('moderate');
+        onPress={() => {
+          toggleBox('moderate');
         }}
         style={styles.pressableContainer}>
-        <Animated.View
-          style={[styles.textContainer, levelActivity === 2 && levelAnimStyle]}>
-          <Animated.Text
-            style={[styles.text, levelActivity === 2 && levelFontAnimStyle]}>
-            Moderate
-          </Animated.Text>
-        </Animated.View>
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>Moderate</Text>
+          <Text style={styles.text}>(2-4H)</Text>
+        </View>
       </Pressable>
       <Pressable
-        onPress={async () => {
-          levelChangeHandler(3);
-          levelNullHandler(3);
-          selectLevel('high');
+        onPress={() => {
+          toggleBox('high');
         }}
         style={styles.pressableContainer}>
-        <Animated.View
-          style={[styles.textContainer, levelActivity === 3 && levelAnimStyle]}>
-          <Animated.Text
-            style={[styles.text, levelActivity === 3 && levelFontAnimStyle]}>
-            High
-          </Animated.Text>
-        </Animated.View>
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>High</Text>
+          <Text style={styles.text}>(4H+)</Text>
+        </View>
       </Pressable>
     </View>
   );
@@ -128,6 +102,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'white',
     flex: 1,
+  },
+  animView: {
+    flex: 1,
+    width: '33.33%',
+    height: '100%',
+    backgroundColor: 'grey',
+    borderRadius: 10,
+  },
+  moveLeft: {
+    alignSelf: 'flex-start',
+  },
+  moveCenter: {
+    alignSelf: 'center',
+  },
+  moveRight: {
+    alignSelf: 'flex-end',
   },
   pressableContainer: {
     flex: 1,

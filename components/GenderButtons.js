@@ -18,10 +18,12 @@ export default function GenderButtons() {
     Animated.timing(femaleAnim, {
       toValue: 0,
       duration: 0,
+      useNativeDriver: false,
     }).start(() => {
       Animated.timing(maleAnim, {
         toValue: 1,
         duration: 200,
+        useNativeDriver: false,
       }).start();
     });
     GoalCtx.setGender('male');
@@ -33,10 +35,12 @@ export default function GenderButtons() {
     Animated.timing(maleAnim, {
       toValue: 0,
       duration: 0,
+      useNativeDriver: false,
     }).start(() => {
       Animated.timing(femaleAnim, {
         toValue: 1,
         duration: 200,
+        useNativeDriver: false,
       }).start();
     });
     GoalCtx.setGender('female');
@@ -65,6 +69,7 @@ export default function GenderButtons() {
       const storedMode = await AsyncStorage.getItem('gender');
       if (storedMode) {
         GoalCtx.setGender(storedMode);
+        storedMode === 'male' ? maleAnimHandler() : femaleAnimHandler();
       }
     }
     fetchGender();

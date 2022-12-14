@@ -16,17 +16,23 @@ export default function GoalCalc() {
   const GoalCtx = useContext(GoalContext);
 
   useEffect(() => {
-    if (GoalCtx.gender === 'male') {
-      const dailyGoal = GoalCtx.weight * 40;
+    if (GoalCtx.gender) {
+      let dailyGoal =
+        GoalCtx.weight * (GoalCtx.gender === 'male' ? 0.028 : 0.024);
+      if (GoalCtx.activityLevel) {
+        dailyGoal = (
+          (dailyGoal +
+            (GoalCtx.activityLevel === 'moderate'
+              ? 1
+              : GoalCtx.activityLevel === 'high'
+              ? 2.1
+              : 0)) *
+          1000
+        ).toFixed(0);
+      }
       GoalCtx.setDailyGoal(dailyGoal);
       return;
     }
-    if (GoalCtx.gender === 'female') {
-      const dailyGoal = GoalCtx.weight * 30;
-      GoalCtx.setDailyGoal(dailyGoal);
-      return;
-    }
-    return;
   }, [GoalCtx]);
 
   return (
