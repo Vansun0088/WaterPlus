@@ -1,20 +1,22 @@
 import { StyleSheet, Pressable, View, Image, Animated } from 'react-native';
 import { useContext, useLayoutEffect, useState } from 'react';
-import { GoalContext } from '../context/goal-context';
+import { GoalContext } from '../../context/goal-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function GenderButtons() {
   const GoalCtx = useContext(GoalContext);
-  const [maleImage, setMaleImage] = useState(require('../images/manSymb.png'));
+  const [maleImage, setMaleImage] = useState(
+    require('../../images/manSymb.png'),
+  );
   const [femaleImage, setFemaleImage] = useState(
-    require('../images/femaleSymb.png'),
+    require('../../images/femaleSymb.png'),
   );
   const [maleAnim, setMaleAnim] = useState(new Animated.Value(0));
   const [femaleAnim, setFemaleAnim] = useState(new Animated.Value(0));
 
   const maleAnimHandler = () => {
-    setMaleImage(require('../images/manSymbBlack.png'));
-    setFemaleImage(require('../images/femaleSymb.png'));
+    setMaleImage(require('../../images/manSymbBlack.png'));
+    setFemaleImage(require('../../images/femaleSymb.png'));
     Animated.timing(femaleAnim, {
       toValue: 0,
       duration: 0,
@@ -30,8 +32,8 @@ export default function GenderButtons() {
   };
 
   const femaleAnimHandler = () => {
-    setFemaleImage(require('../images/femaleSymbBlack.png'));
-    setMaleImage(require('../images/manSymb.png'));
+    setFemaleImage(require('../../images/femaleSymbBlack.png'));
+    setMaleImage(require('../../images/manSymb.png'));
     Animated.timing(maleAnim, {
       toValue: 0,
       duration: 0,

@@ -3,7 +3,7 @@ import { Slider } from '@miblanchard/react-native-slider';
 import { useContext, useLayoutEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { GoalContext } from '../context/goal-context';
+import { GoalContext } from '../../context/goal-context';
 
 export default function SliderWeight() {
   const GoalCtx = useContext(GoalContext);
@@ -30,8 +30,8 @@ export default function SliderWeight() {
       step={1}
       renderThumbComponent={() => {
         return (
-          <View style={styles.thumbInnerContainer}>
-            <View style={styles.thumbContainer}>
+          <View style={styles.thumbContainer}>
+            <View style={styles.thumbInnerContainer}>
               <Text style={styles.thumbText}>{GoalCtx.weight}</Text>
             </View>
           </View>
@@ -42,12 +42,12 @@ export default function SliderWeight() {
 }
 
 const styles = StyleSheet.create({
-  thumbInnerContainer: {
+  thumbContainer: {
     padding: 2,
     backgroundColor: '#fff',
     borderRadius: 40,
   },
-  thumbContainer: {
+  thumbInnerContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#ffffff',

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { GoalContext } from '../context/goal-context';
+import { GoalContext } from '../../context/goal-context';
 
 if (
   Platform.OS === 'android' &&
@@ -101,10 +101,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: 'white',
-    flex: 1,
   },
   animView: {
-    flex: 1,
     width: '33.33%',
     height: '100%',
     backgroundColor: 'grey',
@@ -120,12 +118,11 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   pressableContainer: {
-    flex: 1,
     width: '33.33%',
   },
   textContainer: {
-    paddingVertical: 12,
-    borderRadius: 8,
+    paddingVertical: 8,
+    borderRadius: 10,
   },
   text: {
     color: 'white',

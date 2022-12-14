@@ -1,19 +1,19 @@
-import {
-  KeyboardAvoidingView,
-  ScrollView,
-  StyleSheet,
-  Text,
-} from 'react-native';
+import { Pressable, StyleSheet, Text } from 'react-native';
 import { useContext, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import GenderButtons from '../components/GenderButtons';
+import GenderButtons from '../components/GoalCalc/GenderButtons';
 import { GoalContext } from '../context/goal-context';
-import ActivityBar from '../components/ActivityBar';
-import SliderWeight from '../components/SliderWeight';
+import ActivityBar from '../components/GoalCalc/ActivityBar';
+import SliderWeight from '../components/GoalCalc/SliderWeight';
+import CatTitle from '../components/GoalCalc/CatTitle';
 
-export default function GoalCalc() {
+export default function GoalCalc({ navigation }) {
   const GoalCtx = useContext(GoalContext);
+
+  function mainScreenNavigate() {
+    navigation.navigate('BottomTabMain');
+  }
 
   useEffect(() => {
     if (GoalCtx.gender) {
@@ -37,25 +37,26 @@ export default function GoalCalc() {
 
   return (
     <SafeAreaView style={styles.rootContainer}>
-      <KeyboardAvoidingView style={styles.flexContainer}>
-        <ScrollView
-          accessibility={false}
-          bounces={false}
-          style={styles.flexContainer}>
-          <Text style={styles.title}>Goal Calculator</Text>
-          <GenderButtons />
-          <Text style={styles.catTitle}>GENDER</Text>
-          <SliderWeight />
-          <Text style={styles.catTitle}>WEIGHT</Text>
-          <ActivityBar />
-          <Text style={styles.catTitle}>ACTIVITY LEVEL</Text>
-          <Text style={styles.goalText}>Daily Goal:</Text>
-          <Text style={styles.goalText}>{GoalCtx.dailyGoal}ml</Text>
-          <Text style={styles.noteText}>
-            Note: You can change it later in the app settings
-          </Text>
-        </ScrollView>
-      </KeyboardAvoidingView>
+      <Text style={styles.title}>Goal Calculator</Text>
+      <GenderButtons />
+      <CatTitle>GENDER</CatTitle>
+      <SliderWeight />
+      <CatTitle>WEIGHT</CatTitle>
+      <ActivityBar />
+      <CatTitle>ACTIVITY LEVEL</CatTitle>
+      <Text style={styles.goalText}>Daily Goal:</Text>
+      <Text style={styles.goalNumber}>{GoalCtx.dailyGoal}ml</Text>
+      <Pressable
+        onPress={mainScreenNavigate}
+        style={({ pressed }) => [
+          styles.buttonContainer,
+          pressed && styles.pressed,
+        ]}>
+        <Text style={styles.buttonText}>Confirm</Text>
+      </Pressable>
+      <Text style={styles.noteText}>
+        Note: You can change it later in the app settings
+      </Text>
     </SafeAreaView>
   );
 }
@@ -66,33 +67,44 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
-  flexContainer: {
-    flex: 1,
-  },
   title: {
     color: 'white',
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: '500',
     textAlign: 'center',
     marginBottom: 25,
   },
-  catTitle: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: '400',
-    textAlign: 'center',
-    marginVertical: 15,
-  },
   goalText: {
     fontSize: 30,
-    fontWeight: 'bold',
     color: 'white',
     textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  goalNumber: {
+    fontSize: 30,
+    color: 'white',
+    textAlign: 'center',
+    marginTop: 30,
   },
   noteText: {
     fontSize: 16,
     color: 'white',
     textAlign: 'center',
-    marginVertical: 20,
+    marginTop: 20,
+  },
+  buttonContainer: {
+    alignItems: 'center',
+    borderColor: 'white',
+    borderWidth: 2,
+    paddingVertical: 20,
+    marginTop: 25,
+  },
+  buttonText: {
+    fontSize: 24,
+    color: 'white',
+  },
+  pressed: {
+    opacity: 0.5,
+    backgroundColor: 'white',
   },
 });
