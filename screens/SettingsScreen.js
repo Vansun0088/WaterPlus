@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function SettingsScreen() {
   return (
     <View style={styles.rootContainer}>
-      <Text style={styles.text}>Пихтун пидр! Пасхалка</Text>
+      <Text style={styles.text}>Добро Пожаловать!</Text>
     </View>
   );
 }

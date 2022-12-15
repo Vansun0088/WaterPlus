@@ -15,8 +15,8 @@ export const GoalContext = createContext({
 function GoalContextProvider({ children }) {
   const [chosenGender, setChosenGender] = useState();
   const [chosenWeight, setChosenWeight] = useState(30);
-  const [goal, setGoal] = useState(2000);
-  const [chosenActivityLevel, setChosenActivityLevel] = useState('');
+  const [chosenActivityLevel, setChosenActivityLevel] = useState('light');
+  const [goal, setGoal] = useState();
 
   function setGender(mode) {
     setChosenGender(mode);

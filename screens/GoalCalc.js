@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import GenderButtons from '../components/GoalCalc/GenderButtons';
@@ -9,28 +9,26 @@ import SliderWeight from '../components/GoalCalc/SliderWeight';
 import CatTitle from '../components/GoalCalc/CatTitle';
 
 export default function GoalCalc({ navigation }) {
+  const [goalState, setGoalState] = useState(0);
   const GoalCtx = useContext(GoalContext);
 
   function mainScreenNavigate() {
+    GoalCtx.setDailyGoal(goalState);
     navigation.navigate('BottomTabMain');
   }
 
   useEffect(() => {
-    if (GoalCtx.gender) {
-      let dailyGoal =
-        GoalCtx.weight * (GoalCtx.gender === 'male' ? 0.028 : 0.024);
-      if (GoalCtx.activityLevel) {
-        dailyGoal = (
-          (dailyGoal +
-            (GoalCtx.activityLevel === 'moderate'
-              ? 1
-              : GoalCtx.activityLevel === 'high'
-              ? 2.1
-              : 0)) *
-          1000
-        ).toFixed(0);
-      }
-      GoalCtx.setDailyGoal(dailyGoal);
+    if (GoalCtx.gender && GoalCtx.activityLevel) {
+      let dailyGoal = (
+        (GoalCtx.weight * (GoalCtx.gender === 'male' ? 0.028 : 0.024) +
+          (GoalCtx.activityLevel === 'moderate'
+            ? 1
+            : GoalCtx.activityLevel === 'high'
+            ? 2.1
+            : 0)) *
+        1000
+      ).toFixed(0);
+      setGoalState(dailyGoal);
       return;
     }
   }, [GoalCtx]);
@@ -45,7 +43,7 @@ export default function GoalCalc({ navigation }) {
       <ActivityBar />
       <CatTitle>ACTIVITY LEVEL</CatTitle>
       <Text style={styles.goalText}>Daily Goal:</Text>
-      <Text style={styles.goalNumber}>{GoalCtx.dailyGoal}ml</Text>
+      <Text style={styles.goalNumber}>{goalState}ml</Text>
       <Pressable
         onPress={mainScreenNavigate}
         style={({ pressed }) => [

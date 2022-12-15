@@ -1,10 +1,22 @@
-import { useContext } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useContext, useLayoutEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+
 import { GoalContext } from '../context/goal-context';
 
 export default function MainScreen() {
   const GoalCtx = useContext(GoalContext);
+
+  useLayoutEffect(() => {
+    async function fetchGoal() {
+      const storedGoal = await AsyncStorage.getItem('dailyGoal');
+      if (storedGoal) {
+        GoalCtx.setDailyGoal(storedGoal);
+      }
+    }
+    fetchGoal();
+  }, []);
 
   return (
     <LinearGradient
@@ -12,11 +24,9 @@ export default function MainScreen() {
       end={{ x: 0.5, y: 1 }}
       colors={['#4c669f', '#41bcd2']}
       style={styles.rootContainer}>
-      <View>
-        <View style={styles.roundIconContainer}>
-          <View style={styles.roundIconInnerContainer}>
-            <Text style={styles.dailyGoalText}>{GoalCtx.dailyGoal}</Text>
-          </View>
+      <View style={styles.roundIconContainer}>
+        <View style={styles.roundIconInnerContainer}>
+          <Text style={styles.dailyGoalText}>{GoalCtx.dailyGoal}</Text>
         </View>
       </View>
     </LinearGradient>
