@@ -23,10 +23,21 @@ export default function MainScreen() {
       start={{ x: 0, y: 0.25 }}
       end={{ x: 0.5, y: 1 }}
       colors={['#4c669f', '#41bcd2']}
-      style={styles.rootContainer}>
-      <View style={styles.roundIconContainer}>
-        <View style={styles.roundIconInnerContainer}>
-          <Text style={styles.dailyGoalText}>{GoalCtx.dailyGoal}</Text>
+      style={styles.rootGradient}>
+      <View style={styles.rootContainer}>
+        <View style={styles.roundIconContainer}>
+          <View style={styles.waterLine}></View>
+          <View style={styles.roundIconInnerContainer}>
+            <Text style={styles.dailyGoalText}>{GoalCtx.dailyGoal}</Text>
+          </View>
+        </View>
+        <View style={styles.graphsContainer}>
+          <View style={styles.graphContainer}>
+            <Text>Calendar</Text>
+          </View>
+          <View style={styles.graphContainer}>
+            <Text>Graph</Text>
+          </View>
         </View>
       </View>
     </LinearGradient>
@@ -34,6 +45,9 @@ export default function MainScreen() {
 }
 
 const styles = StyleSheet.create({
+  rootGradient: {
+    flex: 1,
+  },
   rootContainer: {
     flex: 1,
     alignItems: 'center',
@@ -43,15 +57,24 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 100,
     borderWidth: 2,
-    borderColor: 'white',
+    borderColor: 'black',
     marginTop: 200,
-    padding: 0,
+    flexDirection: 'row',
+    overflow: 'hidden',
+  },
+  waterLine: {
+    flex: 1,
+    position: 'absolute',
+    width: '100%',
+    height: '85%',
+    backgroundColor: '#266ccd',
+    alignSelf: 'flex-end',
   },
   roundIconInnerContainer: {
     flex: 1,
     borderRadius: 100,
     borderWidth: 3,
-    borderColor: 'black',
+    borderColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -59,5 +82,20 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 30,
     fontWeight: 'bold',
+  },
+  graphsContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: 20,
+  },
+  graphContainer: {
+    width: 160,
+    height: 160,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 0,
+    backgroundColor: '#ffffff50',
+    borderRadius: 20,
   },
 });

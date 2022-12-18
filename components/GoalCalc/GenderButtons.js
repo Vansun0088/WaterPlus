@@ -1,22 +1,19 @@
 import { StyleSheet, Pressable, View, Image, Animated } from 'react-native';
-import { useContext, useLayoutEffect, useState } from 'react';
-import { GoalContext } from '../../context/goal-context';
+import { useContext, useLayoutEffect, useState, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { GoalContext } from '../../context/goal-context';
 
 export default function GenderButtons() {
   const GoalCtx = useContext(GoalContext);
-  const [maleImage, setMaleImage] = useState(
-    require('../../images/manSymb.png'),
-  );
-  const [femaleImage, setFemaleImage] = useState(
-    require('../../images/femaleSymb.png'),
-  );
-  const [maleAnim, setMaleAnim] = useState(new Animated.Value(0));
-  const [femaleAnim, setFemaleAnim] = useState(new Animated.Value(0));
+  const [maleColor, setMaleColor] = useState('white');
+  const [femaleColor, setFemaleColor] = useState('black');
+  const maleAnim = useRef(new Animated.Value(0)).current;
+  const femaleAnim = useRef(new Animated.Value(0)).current;
 
   const maleAnimHandler = () => {
-    setMaleImage(require('../../images/manSymbBlack.png'));
-    setFemaleImage(require('../../images/femaleSymb.png'));
+    setFemaleColor('white');
+    setMaleColor('black');
     Animated.timing(femaleAnim, {
       toValue: 0,
       duration: 0,
@@ -32,8 +29,8 @@ export default function GenderButtons() {
   };
 
   const femaleAnimHandler = () => {
-    setFemaleImage(require('../../images/femaleSymbBlack.png'));
-    setMaleImage(require('../../images/manSymb.png'));
+    setMaleColor('white');
+    setFemaleColor('black');
     Animated.timing(maleAnim, {
       toValue: 0,
       duration: 0,
@@ -82,12 +79,20 @@ export default function GenderButtons() {
       <View style={styles.genderButtons}>
         <Pressable onPress={maleAnimHandler}>
           <Animated.View style={[styles.imageContainer, animatedMale]}>
-            <Image source={maleImage} style={styles.image} />
+            <Image
+              source={require('../../images/genderButtons/manSymb.png')}
+              style={styles.image}
+              tintColor={maleColor}
+            />
           </Animated.View>
         </Pressable>
         <Pressable onPress={femaleAnimHandler}>
           <Animated.View style={[styles.imageContainer, animatedFemale]}>
-            <Image source={femaleImage} style={styles.image} />
+            <Image
+              source={require('../../images/genderButtons/femaleSymb.png')}
+              style={styles.image}
+              tintColor={femaleColor}
+            />
           </Animated.View>
         </Pressable>
       </View>

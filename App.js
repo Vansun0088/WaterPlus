@@ -3,13 +3,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar, View, Image } from 'react-native';
 import { useContext, useLayoutEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { GoalContext } from './context/goal-context';
 import GoalCalc from './screens/GoalCalc';
 import MainScreen from './screens/MainScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import GoalContextProvider from './context/goal-context';
-import { GoalContext } from './context/goal-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import TabBar from './components/TabBar/TabBar';
 
 const Stack = createNativeStackNavigator();
@@ -20,18 +20,22 @@ function BottomTabMain() {
     <Tab.Navigator
       tabBar={props => <TabBar {...props} />}
       screenOptions={{
-        headerShown: false,
+        tabBarActiveTintColor: '#0000ff',
+        tabBarInactiveTintColor: '#3a3afd',
+        headerStyle: { backgroundColor: '#3a3afd' },
       }}>
       <Tab.Screen
-        name="MainScreen"
+        name="Main"
         component={MainScreen}
         options={{
-          tabBarIcon: () => {
+          headerShown: false,
+          tabBarIcon: (size, color) => {
             return (
-              <View style={{ width: 30, height: 30 }}>
+              <View style={{ width: size, height: size }}>
                 <Image
                   style={{ width: '100%', height: '100%' }}
                   source={require('./images/tabBar/barMain.png')}
+                  tintColor={color}
                 />
               </View>
             );
@@ -42,12 +46,13 @@ function BottomTabMain() {
         name="Settings"
         component={SettingsScreen}
         options={{
-          tabBarIcon: () => {
+          tabBarIcon: (size, color) => {
             return (
-              <View style={{ width: 30, height: 30 }}>
+              <View style={{ width: size, height: size }}>
                 <Image
                   style={{ width: '100%', height: '100%' }}
                   source={require('./images/tabBar/barSettings.png')}
+                  tintColor={color}
                 />
               </View>
             );
@@ -81,7 +86,6 @@ const App = () => {
       <GoalContextProvider>
         <NavigationContainer>
           <Stack.Navigator
-            initialRouteName="BottomTabMain"
             screenOptions={{
               headerShown: false,
               contentStyle: { backgroundColor: 'black' },
