@@ -7,6 +7,7 @@ import { GoalContext } from '../context/goal-context';
 import ActivityBar from '../components/GoalCalc/ActivityBar';
 import SliderWeight from '../components/GoalCalc/SliderWeight';
 import CatTitle from '../components/GoalCalc/CatTitle';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function GoalCalc({ navigation }) {
   const [goalState, setGoalState] = useState(0);
@@ -34,28 +35,30 @@ export default function GoalCalc({ navigation }) {
   }, [GoalCtx]);
 
   return (
-    <SafeAreaView style={styles.rootContainer}>
-      <Text style={styles.title}>Goal Calculator</Text>
-      <GenderButtons />
-      <CatTitle>GENDER</CatTitle>
-      <SliderWeight />
-      <CatTitle>WEIGHT</CatTitle>
-      <ActivityBar />
-      <CatTitle>ACTIVITY LEVEL</CatTitle>
-      <Text style={styles.goalText}>Daily Goal:</Text>
-      <Text style={styles.goalNumber}>{goalState}ml</Text>
-      <Pressable
-        onPress={mainScreenNavigate}
-        style={({ pressed }) => [
-          styles.buttonContainer,
-          pressed && styles.pressed,
-        ]}>
-        <Text style={styles.buttonText}>Confirm</Text>
-      </Pressable>
-      <Text style={styles.noteText}>
-        Note: You can change it later in the app settings
-      </Text>
-    </SafeAreaView>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaView style={styles.rootContainer}>
+        <Text style={styles.title}>Goal Calculator</Text>
+        <GenderButtons />
+        <CatTitle>GENDER</CatTitle>
+        <SliderWeight />
+        <CatTitle>WEIGHT</CatTitle>
+        <ActivityBar />
+        <CatTitle>ACTIVITY LEVEL</CatTitle>
+        <Text style={styles.goalText}>Daily Goal:</Text>
+        <Text style={styles.goalNumber}>{goalState}ml</Text>
+        <Pressable
+          onPress={mainScreenNavigate}
+          style={({ pressed }) => [
+            styles.buttonContainer,
+            pressed && styles.pressed,
+          ]}>
+          <Text style={styles.buttonText}>Confirm</Text>
+        </Pressable>
+        <Text style={styles.noteText}>
+          Note: You can change it later in the app settings
+        </Text>
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 }
 

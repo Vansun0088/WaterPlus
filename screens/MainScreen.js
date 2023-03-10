@@ -1,11 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useContext, useLayoutEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { GoalContext } from '../context/goal-context';
 
-export default function MainScreen() {
+export default function MainScreen({ navigation }) {
   const GoalCtx = useContext(GoalContext);
 
   useLayoutEffect(() => {
@@ -19,28 +20,31 @@ export default function MainScreen() {
   }, []);
 
   return (
-    <LinearGradient
-      start={{ x: 0, y: 0.25 }}
-      end={{ x: 0.5, y: 1 }}
-      colors={['#4c669f', '#41bcd2']}
-      style={styles.rootGradient}>
-      <View style={styles.rootContainer}>
-        <View style={styles.roundIconContainer}>
-          <View style={styles.waterLine}></View>
-          <View style={styles.roundIconInnerContainer}>
-            <Text style={styles.dailyGoalText}>{GoalCtx.dailyGoal}</Text>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <LinearGradient
+        start={{ x: 0, y: 0.25 }}
+        end={{ x: 0.5, y: 1 }}
+        colors={['#4c669f', '#41bcd2']}
+        style={styles.rootGradient}>
+        <View style={styles.rootContainer}>
+          <View style={styles.roundIconContainer}>
+            <View style={styles.waterLine}></View>
+            <View style={styles.roundIconInnerContainer}>
+              <Text style={styles.dailyGoalText}>0/</Text>
+              <Text style={styles.dailyGoalText}>{GoalCtx.dailyGoal}</Text>
+            </View>
+          </View>
+          <View style={styles.graphsContainer}>
+            <Pressable style={styles.graphContainer}>
+              <Text>Plus</Text>
+            </Pressable>
+            <View style={styles.graphContainer}>
+              <Text>Graph</Text>
+            </View>
           </View>
         </View>
-        <View style={styles.graphsContainer}>
-          <View style={styles.graphContainer}>
-            <Text>Calendar</Text>
-          </View>
-          <View style={styles.graphContainer}>
-            <Text>Graph</Text>
-          </View>
-        </View>
-      </View>
-    </LinearGradient>
+      </LinearGradient>
+    </GestureHandlerRootView>
   );
 }
 

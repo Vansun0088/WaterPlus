@@ -1,13 +1,33 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View, Text, Pressable } from 'react-native';
+import React, { useCallback, useMemo, useRef } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import BottomSheet from '@gorhom/bottom-sheet';
+
 import Option from '../components/SettingsScreen/Option.js';
 
 export default function SettingsScreen() {
+  const bottomSheetRef = useRef(null);
+
+  const snapPoints = ['100%', '50%'];
+
   return (
-    <Option
-      path={'GoalCalc'}
-      image={require('../images/settingsIcons/star.png')}>
-      Change Goal
-    </Option>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Option image={require('../images/settingsIcons/star.png')}>
+        Change Goal
+      </Option>
+      <View style={styles.container}>
+        <BottomSheet
+          ref={bottomSheetRef}
+          snapPoints={snapPoints}
+          enablePanDownToClose={true}>
+          <View style={styles.contentContainer}>
+            <Pressable>
+              <Text>TEST</Text>
+            </Pressable>
+          </View>
+        </BottomSheet>
+      </View>
+    </GestureHandlerRootView>
   );
 }
 
@@ -41,5 +61,12 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '600',
     marginLeft: 10,
+  },
+  container: {
+    flex: 1,
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: 'center',
   },
 });
